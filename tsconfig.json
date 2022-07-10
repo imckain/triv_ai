@@ -24,13 +24,14 @@
     "strictBindCallApply": true,
     "noImplicitThis": true,
     "strictPropertyInitialization": true,
-    "alwaysStrict": true,
+    "alwaysStrict": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
+    "src",
+    "decs.d.ts"
   ]
 }

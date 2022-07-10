@@ -1,37 +1,39 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { ReactElement } from 'react';
-import { Button, Text } from 'react-native';
-import { Container } from '../../components';
-import { StackParams } from '../../navigation';
+/* eslint-disable eslint-comments/no-unused-disable */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useCallback } from 'react';
+import { Button, Platform, PlatformAndroidStatic, PlatformIOSStatic, PlatformMacOSStatic, PlatformWebStatic, PlatformWindowsOSStatic, Text, View } from 'react-native';
+import { styles } from './styles';
 
-type NavigationProps = StackNavigationProp<StackParams, 'Details'>;
-type RouteProps = RouteProp<StackParams, 'Details'>;
+interface Props {
+  modalState: boolean,
+  setModalState: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-export function Details(): ReactElement {
-  const { push, popToTop, navigate, goBack } = useNavigation<NavigationProps>();
-  const { params } = useRoute<RouteProps>();
+export const Details: React.FC<{ modalState: boolean, setModalState: React.Dispatch<React.SetStateAction<boolean>> }> = (props: Props) => {
+
+  const showModal = useCallback((param: boolean | undefined) => {
+    return param === true
+      ? 'visible'
+      : 'hidden';
+  }, []);
+
+  const closeModalButton = (platform: PlatformIOSStatic | PlatformAndroidStatic | PlatformWindowsOSStatic | PlatformMacOSStatic | PlatformWebStatic) => {
+    return platform.OS === 'web'
+      ? <Button
+        title="Go to Home"
+        onPress={() => {
+          return props.modalState === true ? props.setModalState(false) : props.setModalState(true);
+        }}
+      />
+      : <></>;
+  };
 
   return (
-    <Container>
+    // eslint-disable-next-line no-sequences
+    <View style={[styles.container, { backfaceVisibility: showModal(props.modalState) }]}>
       <Text>Details Screen</Text>
-      <Text>Data passed: {params?.data}</Text>
-      <Button
-        testID="again"
-        title="Go to Details... again"
-        onPress={() => push('Details')}
-      />
-      <Button
-        testID="home"
-        title="Go to Home"
-        onPress={() => navigate('Home')}
-      />
-      <Button testID="back" title="Go back" onPress={() => goBack()} />
-      <Button
-        testID="first"
-        title="Go back to first screen in stack"
-        onPress={() => popToTop()}
-      />
-    </Container>
+      <Text>State: {JSON.stringify(props.modalState)}</Text>
+      {closeModalButton(Platform)}
+    </View>
   );
-}
+};

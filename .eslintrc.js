@@ -17,5 +17,7 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
     'prettier/prettier': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'eslint-comments/no-unused-disable': 'off',
   },
 };
