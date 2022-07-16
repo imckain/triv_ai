@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { View } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import { styles } from './styles';
 
 type Props = {
@@ -9,8 +9,8 @@ type Props = {
 
 export function Container({ children, testID }: Props): React.ReactElement {
   return (
-    <View style={styles.center} testID={testID}>
+    <SafeAreaView style={styles.center} testID={testID}>
       {children}
-    </View>
+    </SafeAreaView>
   );
 }
