@@ -47,28 +47,50 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   imageContainer: {
-    paddingVertical: 18,
+    paddingTop: 20,
+    marginBottom: 20,
   },
-  gameplayContainer: {
+  answerList: {
+    color: '#fff',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    overflow: 'visible',
+    fontSize: 32,
+    width: '100%',
+  },
+  answerListView: {
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
+    justifyContent: 'space-evenly',
+    borderWidth: 1,
+    borderBottomColor: '#fff',
+    color: '#fff',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    paddingVertical: 16,
+    overflow: 'visible',
+    marginBottom: 18,
+    fontSize: 32,
+    width: '60%',
   },
   answerContainer: {
     justifyContent: 'space-evenly',
-  },
-  answerView: {
-    paddingVertical: 12,
-    borderWidth: 1,
-    borderBottomColor: '#fff',
+    alignItems: 'center',
     width: '100%',
+    paddingVertical: 28,
+    paddingHorizontal: 32,
   },
-  answerText: {
-    color: '#fff',
-  },
-  inputView: {
+  inputViewMobile: {
     paddingVertical: 22,
+    position: 'absolute',
+    bottom: 0,
+    alignSelf: 'center',
+  },
+  inputViewWeb: {
+    paddingVertical: 22,
+    position: 'absolute',
+    bottom: 0,
+    alignSelf: 'center',
   },
   input: {
     backgroundColor: '#000000',

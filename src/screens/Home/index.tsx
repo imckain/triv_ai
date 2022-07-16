@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useCallback, useState } from 'react';
-import { TextInput, Platform, PlatformAndroidStatic, PlatformIOSStatic, PlatformMacOSStatic, PlatformWebStatic, PlatformWindowsOSStatic, Text, View, Image, StyleProp, ViewStyle, FlatList, SafeAreaView } from 'react-native';
+import { TextInput, Platform, PlatformAndroidStatic, PlatformIOSStatic, PlatformMacOSStatic, PlatformWebStatic, PlatformWindowsOSStatic, Text, View, Image, StyleProp, ViewStyle } from 'react-native';
 import { Container } from '../../components';
 import { Header } from '../../components/Header';
 import { Details } from '../Details';
@@ -8,19 +9,36 @@ import { styles } from './styles';
 import * as Result from '../../hooks/temp.json';
 import { useEffect } from 'react';
 
-// type Answer = {
-//   id: string,
-//   input: string,
-// };
+type Answer = {
+  id: number,
+  userInput: string,
+}[];
 
 export const Home: React.FC = () => {
   const [modalState, setModalState] = useState(false);
   const [result, setResult] = useState<typeof Result.result>();
   const [userInput, setUserInput] = useState('');
-  const [answer, setAnswer] = useState([
+  const [guesses, setGuesses] = useState(0);
+  const [answer, setAnswer] = useState<Answer>([
     {
-      id: '1',
-      userInput: 'TEST',
+      'id': 1,
+      'userInput': '',
+    },
+    {
+      'id': 2,
+      'userInput': '',
+    },
+    {
+      'id': 3,
+      'userInput': '',
+    },
+    {
+      'id': 4,
+      'userInput': '',
+    },
+    {
+      'id': 5,
+      'userInput': '',
     },
   ]);
 
@@ -52,36 +70,92 @@ export const Home: React.FC = () => {
       : mobileStyle;
   };
 
-  const renderAnswer = (el: string, state: { userInput: string; }[]) => {
-    if (state[0].userInput.includes('TEST')) {
-      return <></>;
-    }
-    return (
-      <View style={styles.answerView}>
-        <Text style={styles.answerText} >{el != null ? el : 'NULL'}</Text>
-      </View>
-    );
+  const capitalize = (el: string) => {
+    return el.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
   };
 
-  const hydrateAnswers = useCallback((param: string, state: { id: string; userInput: string; }[]) => {
-    if (state[0].userInput.includes('TEST')) {
-      setAnswer([{ id: (state.length + 1).toString(), userInput: param }]);
+  const disableTextInput = useCallback((param: Answer, value: number) => {
+    if (value === 5) {
+      return false;
     }
-    setAnswer([...state, { id: (state.length + 1).toString(), userInput: param }]);
-  }, []);
+    if (value <= 5) {
+      console.log(`value: ${value}`);
+      const mapCorrect = param.map(obj => {
+        console.log(obj.userInput);
+        return result?.correctResponse.find(el => el?.toLowerCase() === obj.userInput.toLowerCase()) ? true : false;
+      });
+      console.log(mapCorrect);
+      return mapCorrect.includes(true) ? false : true;
+    } else {
+      return false;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [guesses]);
 
-  const tempShow = (el: { id: string; userInput: string; }[]) => {
-    el.map((a, i) => {
-      console.log(a.userInput);
-      return (
-        <Text key={i + 1} style={{ color: '#fff' }}>{a.userInput}</Text>
-      );
+  const hydrateAnswers = useCallback((param: string, state: Answer) => {
+    const replaceArray = state.map(obj => {
+      if (obj.id === guesses) {
+        return { id: guesses, userInput: param };
+      }
+      return obj;
     });
+    return replaceArray;
+  }, [guesses]);
+
+  const showGameBoard = useCallback((state: Answer): JSX.Element[] => {
+    console.log(userInput);
+    console.log(state);
+    // let injectLineChangeStyle;
+    const toDisplay = state.map((obj, index) => {
+      const emptyHeight = obj.userInput.length !== 0 ? 'auto' : 36;
+      const addPadding = obj.id === 1 && obj.userInput.length === 0 ? 32 : 0;
+      if (obj.userInput.length === 0 && index === guesses) {
+        if (index === 0) {
+          console.log(index);
+          return (
+            <View style={[styles.answerListView, { marginTop: 30, paddingTop: 0 }]}>
+              <Text key={obj.id} style={[styles.answerList, { height: emptyHeight }]} numberOfLines={1}>{capitalize(userInput)}</Text>
+            </View>
+          );
+        } else {
+          return (
+            <View style={styles.answerListView}>
+              <Text key={obj.id} style={[styles.answerList, { paddingTop: addPadding, height: emptyHeight }]} numberOfLines={1}>{capitalize(userInput)}</Text>
+            </View>
+          );
+        }
+      } else {
+        return (
+          <View style={styles.answerListView}>
+            <Text key={obj.id} style={[styles.answerList, { paddingTop: addPadding, height: emptyHeight, color: checkAnswer(obj.userInput) }]} numberOfLines={1}>{capitalize(obj.userInput)}</Text>
+          </View>
+        );
+      }
+    });
+
+    return toDisplay;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInput]);
+
+  let count = guesses;
+
+  const checkAnswer = (value: string) => {
+    return result?.correctResponse.find(el => el?.toLowerCase() === value.toLowerCase()) ? 'green' : 'red';
   };
 
-  // useEffect(() => {
-  //   hydrateAnswers(userInput, answer);
-  // }, []);
+  useEffect(() => {
+    setGuesses(count);
+    console.log(count);
+  }, [count]);
+
+  useEffect(() => {
+    setAnswer(hydrateAnswers(userInput, answer));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [guesses]);
+
+  useEffect(() => {
+    setUserInput('');
+  }, [answer]);
 
   return (
     <Container>
@@ -92,24 +166,30 @@ export const Home: React.FC = () => {
           {showModal(modalState)}
           <View style={styles.triviaContent}>
             <View style={styles.imageContainer}>
-              <Image style={{ borderRadius: 10, paddingVertical: 20 }} source={{ width: 300, height: 300, uri: result?.urls[0] }} />
+              <Image style={{ borderRadius: 10 }} source={{ width: 300, height: 300, uri: result?.urls[0] }} />
             </View>
-            <SafeAreaView style={styles.answerContainer}>
-              <FlatList
-                ListFooterComponent={
-                  <View style={styles.inputView}>
-                    <TextInput returnKeyType="done" keyboardAppearance="dark" clearButtonMode="always" style={styles.input} value={userInput} onChangeText={input => setUserInput(input)} onEndEditing={() => { hydrateAnswers(userInput, answer); }} textAlign={'center'} placeholder="Answer" placeholderTextColor={'#909090'} />
-                  </View>
-                }
-                contentContainerStyle={styles.gameplayContainer}
-                data={answer}
-                extraData={answer}
-                renderItem={({ item }) => renderAnswer(item.userInput, answer)}
-                keyExtractor={(item, _index) => item.id}
-              />
-              <Text style={{ color: '#fff' }}>{userInput}</Text>
-              {tempShow(answer)}
-            </SafeAreaView>
+            <View style={styles.answerContainer}>
+              {showGameBoard(answer)}
+            </View>
+          </View>
+          <View style={checkWebStyles(styles.inputViewMobile, styles.inputViewWeb, Platform)}>
+            <TextInput
+              keyboardAppearance="dark"
+              clearButtonMode="always"
+              editable={disableTextInput(answer, guesses)}
+              selectTextOnFocus={disableTextInput(answer, guesses)}
+              style={styles.input}
+              value={userInput}
+              onChangeText={input => setUserInput(input)}
+              onSubmitEditing={() => {
+                count++;
+                setGuesses(count);
+              }}
+              clearTextOnFocus
+              textAlign={'center'}
+              placeholder="Answer"
+              placeholderTextColor={'#909090'}
+            />
           </View>
         </View>
       </View>
