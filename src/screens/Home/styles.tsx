@@ -94,13 +94,5 @@ export const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: '#000000',
-    width: 300,
-    height: 60,
-    borderRadius: 5,
-    color: '#ffffff',
-    borderWidth: 1,
-    borderColor: '#303030',
-    textAlign: 'center',
-    fontSize: 18,
   },
 });
