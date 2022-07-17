@@ -138,8 +138,12 @@ export const Home: React.FC = () => {
             <Text style={{ color: '#fff', fontSize: 42, letterSpacing: 16, fontWeight: '700' }}>{result != null ? result.type.toUpperCase() : null}</Text>
             {showModal(modalState)}
             <View style={styles.triviaContent}>
-              <View style={styles.imageContainer}>
+              <View style={styles.aiHintContainer}>
                 <Image style={{ borderRadius: 10 }} source={{ width: 300, height: 300, uri: result?.urls[0] }} />
+                <View style={styles.hintInfo}>
+                  <Text style={styles.infoText}><Text style={[styles.infoText, { fontWeight: '700', fontSize: 28 }]}>{(5 - guesses).toString()}</Text> Guesses Left!</Text>
+                  <Text style={[styles.infoText, { fontSize: 12, paddingTop: 8 }]}>Type anywhere to get started</Text>
+                </View>
               </View>
               <GameBoard
                 state={answer}
