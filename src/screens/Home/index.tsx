@@ -125,9 +125,15 @@ export const Home: React.FC = () => {
           );
         }
       } else {
-        colorChangeOut();
-        setTimeout(() => colorChangeIn(), 1500);
-        if (checkAnswer(obj.userInput) !== 'green' && obj.id < guesses) {
+        if (checkAnswer(obj.userInput) !== 'green' && obj.id <= guesses) {
+          if (userInput.length === 0 && obj.id === guesses) {
+            return (
+              <View key={obj.id} style={styles.answerListView}>
+                <Animated.Text style={[styles.answerList, { paddingTop: addPadding, height: emptyHeight, position: 'absolute', alignSelf: 'center', opacity: fadeOut }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
+                <Animated.Text style={[styles.answerList, { paddingTop: addPadding, height: emptyHeight, color: checkAnswer(obj.userInput), opacity: fadeIn }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
+              </View>
+            );
+          }
           return (
             <View key={obj.id} style={styles.answerListView}>
               <Animated.Text style={[styles.answerList, { paddingTop: addPadding, height: emptyHeight, color: checkAnswer(obj.userInput) }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
@@ -136,8 +142,8 @@ export const Home: React.FC = () => {
         } else {
           return (
             <View key={obj.id} style={styles.answerListView}>
-              <Animated.Text style={[styles.answerList, { paddingTop: addPadding, height: emptyHeight, position: 'absolute', alignSelf: 'center', opacity: (obj.id <= guesses ? fadeOut : 0) }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
-              <Animated.Text style={[styles.answerList, { paddingTop: addPadding, height: emptyHeight, color: checkAnswer(obj.userInput), opacity: (obj.id !== guesses ? fadeIn : 100) }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
+              <Animated.Text style={[styles.answerList, { paddingTop: addPadding, height: emptyHeight, position: 'absolute', alignSelf: 'center', opacity: fadeOut }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
+              <Animated.Text style={[styles.answerList, { paddingTop: addPadding, height: emptyHeight, color: checkAnswer(obj.userInput), opacity: fadeIn }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
             </View>
           );
         }
@@ -201,6 +207,12 @@ export const Home: React.FC = () => {
   useEffect(() => {
     textInputRef.current?.focus();
   }, [guesses]);
+
+  useEffect(() => {
+    colorChangeOut();
+    setTimeout(() => colorChangeIn(), 1500);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userInput]);
 
   return (
     <Container>
