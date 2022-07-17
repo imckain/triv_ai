@@ -46,9 +46,18 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
   },
-  imageContainer: {
+  aiHintContainer: {
     paddingTop: 20,
     marginBottom: 20,
+  },
+  hintInfo: {
+    paddingTop: 20,
+    textAlign: 'center',
+  },
+  infoText: {
+    color: '#fff',
+    fontSize: 24,
+    letterSpacing: 2.8,
   },
   // answerList: {
   //   color: '#fff',

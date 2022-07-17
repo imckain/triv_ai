@@ -19,8 +19,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    borderWidth: 1,
-    borderBottomColor: '#fff',
+    // borderWidth: 1,
+    // borderBottomColor: '#fff',
     color: '#fff',
     textAlign: 'center',
     textAlignVertical: 'center',
@@ -29,5 +29,10 @@ export const styles = StyleSheet.create({
     marginBottom: 18,
     fontSize: 32,
     width: '60%',
+  },
+  infoText: {
+    color: '#fff',
+    fontSize: 42,
+    letterSpacing: 6,
   },
 });
