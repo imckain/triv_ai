@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     // borderWidth: 1,
-    // borderBottomColor: '#fff',
+    // borderBottomColor: '#ffffff64',
     color: '#fff',
     textAlign: 'center',
     textAlignVertical: 'center',
