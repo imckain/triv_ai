@@ -65,8 +65,8 @@ export const GameBoard: React.FC<{ state: Answer, userInput: string, guesses: nu
     const toDisplay = state.map((obj, index) => {
       if (obj.userInput.length === 0 && index === guesses) {
         return (
-          <View style={styles.answerListView}>
-            <Text key={obj.id} style={[styles.answerList]} numberOfLines={1}>{capitalize(userInput)}</Text>
+          <View key={obj.id} style={styles.answerListView}>
+            <Text style={[styles.answerList]} numberOfLines={1}>{capitalize(userInput)}</Text>
           </View>
         );
       } else {
