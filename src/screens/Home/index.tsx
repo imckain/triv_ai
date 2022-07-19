@@ -15,6 +15,7 @@ import {
   StyleProp,
   ViewStyle,
   TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
 import { Container } from '../../components';
 import { Header } from '../../components/Header';
@@ -134,7 +135,7 @@ export const Home: React.FC = () => {
       <TouchableWithoutFeedback onPress={() => textInputRef.current?.focus()}>
         <View style={checkWebStyles(styles.containerMobile, styles.containerWeb, Platform)}>
           {showHeader(Platform)}
-          <View style={checkWebStyles(styles.homePageMobile, styles.homePageWeb, Platform)}>
+          <ScrollView showsVerticalScrollIndicator={false} style={{ width: '100%' }} contentContainerStyle={checkWebStyles(styles.homePageMobile, styles.homePageWeb, Platform)}>
             <Text style={{ color: '#fff', fontSize: 42, letterSpacing: 16, fontWeight: '700' }}>{result != null ? result.type.toUpperCase() : null}</Text>
             {showModal(modalState)}
             <View style={styles.triviaContent}>
@@ -158,7 +159,7 @@ export const Home: React.FC = () => {
                 clearButtonMode="always"
                 editable={disableTextInput(answer, guesses)}
                 selectTextOnFocus={disableTextInput(answer, guesses)}
-                style={[styles.input, { height: 0, width: 0 }]}
+                style={styles.input}
                 value={userInput}
                 onChangeText={input => setUserInput(input)}
                 onSubmitEditing={() => {
@@ -175,9 +176,10 @@ export const Home: React.FC = () => {
                 placeholderTextColor={'#909090'}
                 autoFocus={false}
                 ref={textInputRef}
+                maxLength={18}
               />
             </View>
-          </View>
+          </ScrollView>
         </View>
       </TouchableWithoutFeedback>
     </Container>

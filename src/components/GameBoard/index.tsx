@@ -24,7 +24,7 @@ export const GameBoard: React.FC<{ state: Answer, userInput: string, guesses: nu
       fadeIn,
       {
         toValue: 1,
-        duration: 1500,
+        duration: 1000,
         useNativeDriver: false,
       }
     ).start();
@@ -36,16 +36,16 @@ export const GameBoard: React.FC<{ state: Answer, userInput: string, guesses: nu
         fadeOut,
         {
           toValue: 0,
-          duration: 2000,
+          duration: 1500,
           useNativeDriver: false,
         }
       ).start();
     }, 300);
   };
 
-  const capitalize = (el: string) => {
-    return el.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
-  };
+  // const capitalize = (el: string) => {
+  //   return el.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+  // };
 
   const showWinMessage = (el: Answer) => {
     if (props.guesses === 0) {
@@ -66,7 +66,7 @@ export const GameBoard: React.FC<{ state: Answer, userInput: string, guesses: nu
       if (obj.userInput.length === 0 && index === guesses) {
         return (
           <View key={obj.id} style={styles.answerListView}>
-            <Text style={[styles.answerList]} numberOfLines={1}>{capitalize(userInput)}</Text>
+            <Text style={[styles.answerList]} numberOfLines={1}>{userInput}</Text>
           </View>
         );
       } else {
@@ -74,21 +74,21 @@ export const GameBoard: React.FC<{ state: Answer, userInput: string, guesses: nu
           if (userInput.length === 0 && obj.id === guesses) {
             return (
               <View key={obj.id} style={styles.answerListView}>
-                <Animated.Text style={[styles.answerList, { position: 'absolute', alignSelf: 'center', opacity: fadeOut }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
-                <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput), opacity: fadeIn }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
+                <Animated.Text style={[styles.answerList, { position: 'absolute', alignSelf: 'center', opacity: fadeOut }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
+                <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput), opacity: fadeIn }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
               </View>
             );
           }
           return (
             <View key={obj.id} style={styles.answerListView}>
-              <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput) }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
+              <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput) }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
             </View>
           );
         } else {
           return (
             <View key={obj.id} style={styles.answerListView}>
-              <Animated.Text style={[styles.answerList, { position: 'absolute', alignSelf: 'center', opacity: fadeOut }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
-              <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput), opacity: fadeIn }]} numberOfLines={1}>{capitalize(obj.userInput)}</Animated.Text>
+              <Animated.Text style={[styles.answerList, { position: 'absolute', alignSelf: 'center', opacity: fadeOut }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
+              <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput), opacity: fadeIn }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
             </View>
           );
         }
@@ -101,7 +101,7 @@ export const GameBoard: React.FC<{ state: Answer, userInput: string, guesses: nu
 
   useEffect(() => {
     colorChangeOut();
-    setTimeout(() => colorChangeIn(), 1500);
+    setTimeout(() => colorChangeIn(), 1000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.userInput]);
 
