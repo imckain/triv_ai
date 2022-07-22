@@ -30,6 +30,7 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
   },
   homePageWeb: {
+    flexGrow: 1,
     alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'center',

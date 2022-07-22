@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-native/no-inline-styles */
 import React, { useCallback, useRef, useState } from 'react';
@@ -11,7 +12,6 @@ import {
   PlatformWindowsOSStatic,
   Text,
   View,
-  Image,
   StyleProp,
   ViewStyle,
   TouchableWithoutFeedback,
@@ -24,11 +24,36 @@ import { styles } from './styles';
 import * as Result from '../../hooks/temp.json';
 import { useEffect } from 'react';
 import { GameBoard } from '../../components/GameBoard';
+import { ImageCarousel } from '../../components/ImageCarousel';
 
 type Answer = {
   id: number,
   userInput: string,
 }[];
+
+type resultObj = {
+  id: number;
+  type: string;
+  artist: string;
+  album: string;
+  genre: string;
+  song: string;
+  keywords: string[];
+  correctResponse: (string | null)[];
+  urls: string[];
+}
+
+const initialResultObj = {
+  'id': 0,
+  'type': '',
+  'artist': '',
+  'album': '',
+  'genre': '',
+  'song': '',
+  'keywords': [''],
+  'correctResponse': [''],
+  'urls': [''],
+};
 
 const intialState = [
   {
@@ -55,10 +80,12 @@ const intialState = [
 
 export const Home: React.FC = () => {
   const [modalState, setModalState] = useState(false);
-  const [result, setResult] = useState<typeof Result.result>();
+  const [result, setResult] = useState<resultObj>(initialResultObj);
   const [userInput, setUserInput] = useState('');
   const [guesses, setGuesses] = useState(0);
   const [answer, setAnswer] = useState<Answer>(intialState);
+
+  console.log(result);
 
   const textInputRef = useRef<TextInput>(null);
   let count = guesses;
@@ -76,7 +103,7 @@ export const Home: React.FC = () => {
   };
 
   const checkAnswer = (value: string) => {
-    return result?.correctResponse.find(el => el?.toLowerCase() === value.toLowerCase()) ? 'green' : 'red';
+    return result?.correctResponse.find(el => el?.toLowerCase() === value.toLowerCase()) ? true : false;
   };
 
   const disableTextInput = useCallback((param: Answer, value: number) => {
@@ -140,7 +167,7 @@ export const Home: React.FC = () => {
             {showModal(modalState)}
             <View style={styles.triviaContent}>
               <View style={styles.aiHintContainer}>
-                <Image style={{ borderRadius: 10 }} source={{ width: 300, height: 300, uri: result?.urls[0] }} />
+                <ImageCarousel ref={textInputRef} result={result} guesses={guesses} checkAnswer={checkAnswer} />
                 <View style={styles.hintInfo}>
                   <Text style={styles.infoText}><Text style={[styles.infoText, { fontWeight: '700', fontSize: 28 }]}>{(5 - guesses).toString()}</Text> Guesses Left!</Text>
                   <Text style={[styles.infoText, { fontSize: 12, paddingTop: 8 }]}>Type anywhere to get started</Text>
@@ -160,8 +187,8 @@ export const Home: React.FC = () => {
                 editable={disableTextInput(answer, guesses)}
                 selectTextOnFocus={disableTextInput(answer, guesses)}
                 style={styles.input}
-                value={userInput}
-                onChangeText={input => setUserInput(input)}
+                value={userInput.replace(/[`~0-9@#%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '')}
+                onChangeText={input => setUserInput(input.replace(/[`~0-9@#%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ''))}
                 onSubmitEditing={() => {
                   if (userInput.length !== 0) {
                     count++;
@@ -176,7 +203,7 @@ export const Home: React.FC = () => {
                 placeholderTextColor={'#909090'}
                 autoFocus={false}
                 ref={textInputRef}
-                maxLength={18}
+                maxLength={21}
               />
             </View>
           </ScrollView>
