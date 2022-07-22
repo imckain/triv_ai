@@ -7,7 +7,7 @@ interface Props {
   state: Answer,
   userInput: string,
   guesses: number,
-  checkAnswer: (value: string) => 'green' | 'red',
+  checkAnswer: (value: string) => true | false,
 }
 
 type Answer = {
@@ -15,7 +15,7 @@ type Answer = {
   userInput: string,
 }[];
 
-export const GameBoard: React.FC<{ state: Answer, userInput: string, guesses: number, checkAnswer: (value: string) => 'green' | 'red' }> = (props: Props) => {
+export const GameBoard: React.FC<{ state: Answer, userInput: string, guesses: number, checkAnswer: (value: string) => true | false }> = (props: Props) => {
   const fadeIn = new Animated.Value(0);
   const fadeOut = new Animated.Value(1);
 
@@ -51,7 +51,7 @@ export const GameBoard: React.FC<{ state: Answer, userInput: string, guesses: nu
     if (props.guesses === 0) {
       return <></>;
     }
-    if (props.checkAnswer(el[props.guesses - 1].userInput) === 'green') {
+    if (props.checkAnswer(el[props.guesses - 1].userInput) === true) {
       return <Animated.Text style={[styles.infoText, { opacity: fadeIn }]}>Nice Job!</Animated.Text>;
     } else {
       return <></>;
@@ -70,25 +70,25 @@ export const GameBoard: React.FC<{ state: Answer, userInput: string, guesses: nu
           </View>
         );
       } else {
-        if (checkAnswer(obj.userInput) !== 'green' && obj.id <= guesses) {
+        if (checkAnswer(obj.userInput) !== true && obj.id <= guesses) {
           if (userInput.length === 0 && obj.id === guesses) {
             return (
               <View key={obj.id} style={styles.answerListView}>
                 <Animated.Text style={[styles.answerList, { position: 'absolute', alignSelf: 'center', opacity: fadeOut }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
-                <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput), opacity: fadeIn }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
+                <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput) ? 'green' : 'red', opacity: fadeIn }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
               </View>
             );
           }
           return (
             <View key={obj.id} style={styles.answerListView}>
-              <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput) }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
+              <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput) ? 'green' : 'red' }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
             </View>
           );
         } else {
           return (
             <View key={obj.id} style={styles.answerListView}>
               <Animated.Text style={[styles.answerList, { position: 'absolute', alignSelf: 'center', opacity: fadeOut }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
-              <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput), opacity: fadeIn }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
+              <Animated.Text style={[styles.answerList, { color: checkAnswer(obj.userInput) ? 'green' : 'red', opacity: fadeIn }]} numberOfLines={1}>{obj.userInput}</Animated.Text>
             </View>
           );
         }

@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 38,
     textTransform: 'capitalize',
+    letterSpacing: 1.5,
   },
   answerListView: {
     flexDirection: 'column',
