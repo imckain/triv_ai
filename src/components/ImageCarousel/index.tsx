@@ -7,7 +7,7 @@ interface Props {
   result: resultObj,
   guesses: number,
   checkAnswer: (value: string) => true | false,
-  ref: React.RefObject<TextInput>
+  imageRef: React.RefObject<TextInput>,
 }
 
 type resultObj = {
@@ -22,7 +22,7 @@ type resultObj = {
   urls: string[],
 };
 
-export const ImageCarousel: React.FC<{ result: resultObj, guesses: number, checkAnswer: (value: string) => true | false, ref: React.RefObject<TextInput> }> = (props: Props) => {
+export const ImageCarousel: React.FC<{ result: resultObj, guesses: number, checkAnswer: (value: string) => true | false, imageRef: React.RefObject<TextInput> }> = (props: Props) => {
   const [imageUrls, setImageUrls] = useState<string[]>([props.result.urls[0].toString()]);
   const [imageToShow, setImageToShow] = useState(0);
 
@@ -106,9 +106,41 @@ export const ImageCarousel: React.FC<{ result: resultObj, guesses: number, check
   const showImageIndex = useCallback((imageIndex: number) => {
     console.log(imageIndex);
     const toDisplay = imageUrls.map((_value, index) => {
-      return index === imageIndex
-        ? <Text style={{ fontSize: 32, color: '#ffffff' }} key={index}>◉</Text>
-        : <Text style={{ fontSize: 26, color: '#9c9c9c41' }} key={index}>○</Text>;
+      if (index === imageIndex) {
+        return (
+          <View style={styles.imageIndex}>
+            <Text style={{ fontSize: 20, color: '#ffffff' }} key={index}>●</Text>
+          </View>
+        );
+      }
+      if (index !== imageIndex) {
+        if (index < imageIndex) {
+          return (
+            <Pressable style={styles.imageIndex} onPress={() => {
+              setImageToShow(index);
+            }}>
+              <Text style={{ fontSize: 18, color: '#9c9c9c91' }} key={index}>○</Text>
+            </Pressable>
+          );
+        }
+        if (index > imageIndex) {
+          return (
+            <Pressable style={styles.imageIndex} onPress={() => {
+              setImageToShow(index);
+            }}>
+              <Text style={{ fontSize: 18, color: '#9c9c9c91' }} key={index}>○</Text>
+            </Pressable>
+          );
+        } else {
+          return index === imageIndex
+            ? <Text style={{ fontSize: 20, color: '#ffffff' }} key={index}>●</Text>
+            : <Text style={{ fontSize: 18, color: '#9c9c9c91' }} key={index}>○</Text>;
+        }
+      } else {
+        return index === imageIndex
+          ? <Text style={{ fontSize: 20, color: '#ffffff' }} key={index}>●</Text>
+          : <Text style={{ fontSize: 18, color: '#9c9c9c91' }} key={index}>○</Text>;
+      }
     });
 
     return toDisplay;
@@ -133,30 +165,28 @@ export const ImageCarousel: React.FC<{ result: resultObj, guesses: number, check
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageUrls]);
 
-  useEffect(() => {
-    props.ref?.current?.focus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [imageToShow]);
-
   return (
     <View>
       <Pressable
         ref={imageRef}
         style={styles.imageContainer}
         onPress={() => {
+          imageRef.current?.blur();
+          props.imageRef.current?.focus();
           if (imageUrls.length >= 1) {
             imageUrls.length >= imageToShow + 1 && imageUrls.length !== imageToShow + 1
               ? setImageToShow(imageToShow + 1)
               : setImageToShow(0);
           }
-          imageRef.current?.blur();
-          props.ref?.current?.focus();
         }}>
         {showImage(imageToShow, imageUrls)}
       </Pressable>
       <View style={styles.imageIndex}>
         {showImageIndex(imageToShow)}
       </View>
+      <TextInput
+        style={{ width: 0, height: 0 }}
+      />
     </View>
   );
 };
