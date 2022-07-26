@@ -46,6 +46,12 @@ export const styles = StyleSheet.create({
     shadowRadius: 20,
     shadowOpacity: 0.3,
   },
+  typeText: {
+    color: '#fff',
+    fontSize: 42,
+    letterSpacing: 16,
+    fontWeight: '700',
+  },
   triviaContent: {
     flex: 1,
     alignItems: 'center',
