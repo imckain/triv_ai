@@ -21,5 +21,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+    textAlignVertical: 'center',
+    paddingHorizontal: 1.6,
   },
 });

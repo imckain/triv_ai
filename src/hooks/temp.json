@@ -1,26 +1,26 @@
 {
   "result": {
     "id": 100,
-    "type": "Music",
-    "artist": "Michael Jackson",
-    "album": "Thriller",
-    "genre": "pop",
-    "song": "Thriller",
+    "type": [
+      "Movie",
+      "Book"
+    ],
+    "artist": "",
+    "album": "",
+    "genre": "Fantasy",
+    "song": "",
     "keywords": [
-      "zombies",
-      "thriller",
-      "80's",
-      "pop"
+      "LOTR"
     ],
     "correctResponse": [
-      "Michael Jackson",
-      "Thriller",
+      "Lord of the Rings",
+      "LOTR",
       null
     ],
     "urls": [
-      "https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png",
-      "https://upload.wikimedia.org/wikipedia/en/8/89/Michael_jackson_thriller_12_inch_single_USA.jpg",
-      "https://m.media-amazon.com/images/M/MV5BODhhZjJlYTktZDQ2MS00Yzk4LWFlOTQtYTgyOGE1ZGE5YWEyL2ltYWdlXkEyXkFqcGdeQXVyMzA5MjgyMjI@._V1_.jpg"
+      "https://cdn.discordapp.com/attachments/333057378767601664/998983604505935902/Doodles_Two_Towers_fantasy_6bfe6cf4-7fae-48f5-b948-13548735755b.png",
+      "https://cdn.discordapp.com/attachments/333057378767601664/998983663159091311/Doodles_Fiery_volcano_ab55885c-102a-4217-b6fd-e46c8a341d7e.png",
+      "https://cdn.discordapp.com/attachments/333057378767601664/998986204546596874/Doodles_Stone_entrance_to_a_dark_mine_with_dwarven_language_wri_5c0fa553-aafe-49f4-807c-ae96fbb98a2e.png"
     ]
   }
 }

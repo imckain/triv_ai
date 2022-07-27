@@ -1,0 +1,26 @@
+{
+  "result": {
+    "id": 100,
+    "type": "Music",
+    "artist": "Michael Jackson",
+    "album": "Thriller",
+    "genre": "pop",
+    "song": "Thriller",
+    "keywords": [
+      "zombies",
+      "thriller",
+      "80's",
+      "pop"
+    ],
+    "correctResponse": [
+      "Michael Jackson",
+      "Thriller",
+      null
+    ],
+    "urls": [
+      "https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png",
+      "https://upload.wikimedia.org/wikipedia/en/8/89/Michael_jackson_thriller_12_inch_single_USA.jpg",
+      "https://m.media-amazon.com/images/M/MV5BODhhZjJlYTktZDQ2MS00Yzk4LWFlOTQtYTgyOGE1ZGE5YWEyL2ltYWdlXkEyXkFqcGdeQXVyMzA5MjgyMjI@._V1_.jpg"
+    ]
+  }
+}
