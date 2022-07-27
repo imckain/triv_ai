@@ -5,8 +5,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: 'black',
-    borderWidth: 2,
     width: '100%',
   },
   containerWeb: {
@@ -14,8 +12,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: 'black',
-    borderWidth: 2,
     width: '100%',
   },
   homePageMobile: {
@@ -24,9 +20,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     maxWidth: 800,
-    borderColor: 'black',
-    borderWidth: 2,
-    backgroundColor: '#000000',
     paddingTop: 16,
   },
   homePageWeb: {
@@ -37,14 +30,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     maxWidth: 800,
-    borderColor: 'black',
-    borderWidth: 2,
-    backgroundColor: '#000000',
     paddingVertical: 88,
-    shadowColor: '#2d2d2dad',
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 20,
-    shadowOpacity: 0.3,
+  },
+  typeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   typeText: {
     color: '#fff',

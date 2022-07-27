@@ -7,12 +7,12 @@ interface Props {
   result: resultObj,
   guesses: number,
   checkAnswer: (value: string) => true | false,
-  imageRef: React.RefObject<TextInput>,
+  textInputRef: React.RefObject<TextInput>,
 }
 
 type resultObj = {
   id: number,
-  type: string,
+  type: string[],
   artist: string,
   album: string,
   genre: string,
@@ -22,7 +22,7 @@ type resultObj = {
   urls: string[],
 };
 
-export const ImageCarousel: React.FC<{ result: resultObj, guesses: number, checkAnswer: (value: string) => true | false, imageRef: React.RefObject<TextInput> }> = (props: Props) => {
+export const ImageCarousel: React.FC<{ result: resultObj, guesses: number, checkAnswer: (value: string) => true | false, textInputRef: React.RefObject<TextInput> }> = (props: Props) => {
   const [imageUrls, setImageUrls] = useState<string[]>([props.result.urls[0].toString()]);
   const [imageToShow, setImageToShow] = useState(0);
 
@@ -172,7 +172,7 @@ export const ImageCarousel: React.FC<{ result: resultObj, guesses: number, check
         style={styles.imageContainer}
         onPress={() => {
           imageRef.current?.blur();
-          props.imageRef.current?.focus();
+          props.textInputRef.current?.focus();
           if (imageUrls.length >= 1) {
             imageUrls.length >= imageToShow + 1 && imageUrls.length !== imageToShow + 1
               ? setImageToShow(imageToShow + 1)
