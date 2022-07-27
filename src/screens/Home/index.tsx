@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   TextInput,
   Platform,
@@ -16,6 +16,7 @@ import {
   ViewStyle,
   TouchableWithoutFeedback,
   ScrollView,
+  Animated,
 } from 'react-native';
 import { Container } from '../../components';
 import { Header } from '../../components/Header';
@@ -33,7 +34,7 @@ type Answer = {
 
 type resultObj = {
   id: number;
-  type: string;
+  type: string[];
   artist: string;
   album: string;
   genre: string;
@@ -45,7 +46,7 @@ type resultObj = {
 
 const initialResultObj = {
   'id': 0,
-  'type': '',
+  'type': [''],
   'artist': '',
   'album': '',
   'genre': '',
@@ -87,11 +88,32 @@ export const Home: React.FC = () => {
 
   console.log(result);
 
-  const textInputRef = useRef<TextInput>(null);
+  const textInputRef = React.createRef<TextInput>();
   let count = guesses;
 
-  const showModal = (state: boolean) => {
-    return state === true ? <Details modalState={modalState} setModalState={setModalState} /> : <></>;
+  const modalFadeIn = new Animated.Value(1);
+  const modalFadeOut = new Animated.Value(0.7);
+
+  const modalIn = () => {
+    Animated.timing(
+      modalFadeIn,
+      {
+        toValue: 0.7,
+        duration: 800,
+        useNativeDriver: false,
+      }
+    ).start();
+  };
+
+  const modalOut = () => {
+    Animated.timing(
+      modalFadeOut,
+      {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: false,
+      }
+    ).start();
   };
 
   const showHeader = (platform: PlatformIOSStatic | PlatformAndroidStatic | PlatformWindowsOSStatic | PlatformMacOSStatic | PlatformWebStatic) => {
@@ -104,6 +126,16 @@ export const Home: React.FC = () => {
 
   const checkAnswer = (value: string) => {
     return result?.correctResponse.find(el => el?.toLowerCase() === value.toLowerCase()) ? true : false;
+  };
+
+  const getTypeText = (obj: resultObj) => {
+    if (result !== null) {
+      return obj.type.map((el, idx) => {
+        return <Text key={idx} style={styles.typeText}>{el.toUpperCase()}{idx + 1 !== result.type.length && result.type.length > 1 ? ' | ' : null}</Text>;
+      });
+    } else {
+      return <></>;
+    }
   };
 
   const disableTextInput = useCallback((param: Answer, value: number) => {
@@ -154,20 +186,62 @@ export const Home: React.FC = () => {
   }, [result]);
 
   useEffect(() => {
+    if (guesses > 0 && checkAnswer(answer[guesses - 1].userInput) === true) {
+      setTimeout(() => {
+        setModalState(true);
+      }, 2800);
+    } else {
+      return;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answer]);
+
+  useEffect(() => {
     textInputRef.current?.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guesses]);
+
+  useEffect(() => {
+    modalIn();
+    modalOut();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalState, result]);
 
   return (
     <Container>
-      <TouchableWithoutFeedback onPress={() => textInputRef.current?.focus()}>
-        <View style={checkWebStyles(styles.containerMobile, styles.containerWeb, Platform)}>
+      {/* {showModal(modalState)} */}
+      <Details result={result} modalState={modalState} setModalState={setModalState} />
+      <TouchableWithoutFeedback onPress={() => {
+        setModalState(false);
+        textInputRef.current?.focus();
+      }}>
+        <Animated.View style={[checkWebStyles(styles.containerMobile, styles.containerWeb, Platform), { opacity: modalState === true ? modalFadeIn : modalFadeOut }]}>
           {showHeader(Platform)}
           <ScrollView showsVerticalScrollIndicator={false} style={{ width: '100%' }} contentContainerStyle={checkWebStyles(styles.homePageMobile, styles.homePageWeb, Platform)}>
-            <Text style={{ color: '#fff', fontSize: 42, letterSpacing: 16, fontWeight: '700' }}>{result != null ? result.type.toUpperCase() : null}</Text>
-            {showModal(modalState)}
+            <View style={styles.typeContainer}>
+              {getTypeText(result)}
+            </View>
+            <TextInput
+              editable={disableTextInput(answer, guesses)}
+              style={styles.input}
+              value={userInput.replace(/[`~0-9@#%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '')}
+              onChangeText={input => setUserInput(input.replace(/[`~0-9@#%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ''))}
+              onSubmitEditing={() => {
+                if (userInput.length !== 0) {
+                  count++;
+                  setGuesses(count);
+                } else {
+                  return;
+                }
+              }}
+              clearTextOnFocus={false}
+              autoFocus={false}
+              ref={textInputRef}
+              maxLength={21}
+            />
             <View style={styles.triviaContent}>
               <View style={styles.aiHintContainer}>
-                <ImageCarousel ref={textInputRef} result={result} guesses={guesses} checkAnswer={checkAnswer} />
+                <ImageCarousel textInputRef={textInputRef} result={result} guesses={guesses} checkAnswer={checkAnswer} />
                 <View style={styles.hintInfo}>
                   <Text style={styles.infoText}><Text style={[styles.infoText, { fontWeight: '700', fontSize: 28 }]}>{(5 - guesses).toString()}</Text> Guesses Left!</Text>
                   <Text style={[styles.infoText, { fontSize: 12, paddingTop: 8 }]}>Type anywhere to get started</Text>
@@ -180,34 +254,8 @@ export const Home: React.FC = () => {
                 checkAnswer={checkAnswer}
               />
             </View>
-            <View style={checkWebStyles(styles.inputViewMobile, styles.inputViewWeb, Platform)}>
-              <TextInput
-                keyboardAppearance="dark"
-                clearButtonMode="always"
-                editable={disableTextInput(answer, guesses)}
-                selectTextOnFocus={disableTextInput(answer, guesses)}
-                style={styles.input}
-                value={userInput.replace(/[`~0-9@#%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '')}
-                onChangeText={input => setUserInput(input.replace(/[`~0-9@#%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, ''))}
-                onSubmitEditing={() => {
-                  if (userInput.length !== 0) {
-                    count++;
-                    setGuesses(count);
-                  } else {
-                    return;
-                  }
-                }}
-                clearTextOnFocus
-                textAlign={'center'}
-                placeholder="Answer"
-                placeholderTextColor={'#909090'}
-                autoFocus={false}
-                ref={textInputRef}
-                maxLength={21}
-              />
-            </View>
           </ScrollView>
-        </View>
+        </Animated.View>
       </TouchableWithoutFeedback>
     </Container>
   );
