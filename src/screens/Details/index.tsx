@@ -19,7 +19,7 @@ type resultObj = {
   genre: string;
   song: string;
   keywords: string[];
-  correctResponse: (string | null)[];
+  correctResponse: string[];
   urls: string[];
 }
 
