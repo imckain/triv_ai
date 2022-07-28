@@ -40,7 +40,7 @@ type resultObj = {
   genre: string;
   song: string;
   keywords: string[];
-  correctResponse: (string | null)[];
+  correctResponse: string[];
   urls: string[];
 }
 
@@ -99,7 +99,7 @@ export const Home: React.FC = () => {
       modalFadeIn,
       {
         toValue: 0.7,
-        duration: 800,
+        duration: 400,
         useNativeDriver: false,
       }
     ).start();
@@ -110,7 +110,7 @@ export const Home: React.FC = () => {
       modalFadeOut,
       {
         toValue: 1,
-        duration: 800,
+        duration: 400,
         useNativeDriver: false,
       }
     ).start();
@@ -183,6 +183,8 @@ export const Home: React.FC = () => {
 
   useEffect(() => {
     setAnswer(intialState);
+    setModalState(false);
+    setUserInput('');
   }, [result]);
 
   useEffect(() => {
